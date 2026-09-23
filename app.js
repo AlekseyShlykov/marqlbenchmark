@@ -57,7 +57,7 @@ function draw(animate = true) {
     cards.append(button);
   });
 }
-fetch('assets/benchmark-data.json').then(response=>{if(!response.ok)throw new Error('Data unavailable');return response.json();}).then(data=>{
+fetch('assets/benchmark-data.json?v=oracle-1', {cache: 'no-cache'}).then(response=>{if(!response.ok)throw new Error('Data unavailable');return response.json();}).then(data=>{
   models=data.models;draw(false);
   const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){draw(true);observer.disconnect();}},{threshold:.2});observer.observe(svg);
 }).catch(()=>{document.querySelector('#chart-error').hidden=false;svg.hidden=true;document.querySelector('#world').disabled=true;document.querySelector('#replay').disabled=true;});
