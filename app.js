@@ -51,7 +51,7 @@ function draw(animate = true) {
     button.type='button';button.className='model-card';button.style.setProperty('--model',m.color);
     button.setAttribute('aria-pressed',String(selected<0||selected===i));
     button.setAttribute('aria-label',`${m.name}, ${money(m.value)} illustrative value. Highlight model.`);
-    const parts=[['model-name',m.name],['model-value',money(m.value)],['model-detail','Illustrative endpoint'],['model-detail','Profit: '+money(m.result.econProfit)],['model-score',(m.result.deltaVsReference>=0?'+':'−')+money(Math.abs(m.result.deltaVsReference))+' vs. formula ↗']];
+    const parts=[['model-name',m.name],['model-value',money(m.value)],['model-detail','Illustrative endpoint'],['model-detail','Profit: '+money(m.result.econProfit)],['model-score',(m.result.deltaVsReference>=0?'+':'−')+money(Math.abs(m.result.deltaVsReference))+' vs. formula']];
     parts.forEach(([className,text])=>{const span=document.createElement('span');span.className=className;span.textContent=text;if(className==='model-name'){const dot=document.createElement('i');dot.className='model-dot';span.prepend(dot);}button.append(span);});
     button.addEventListener('click',()=>{selected=selected===i?-1:i;draw(false);document.querySelectorAll('.model-card')[i].focus({preventScroll:true});});
     cards.append(button);
@@ -70,3 +70,42 @@ document.querySelector('#copy-code').addEventListener('click',async event=>{
   catch{const selection=window.getSelection();const range=document.createRange();range.selectNodeContents(document.querySelector('#protocol'));selection.removeAllRanges();selection.addRange(range);button.textContent='Select & copy';}
   setTimeout(()=>button.textContent='Copy',2200);
 });
+
+// Reveal navigation when the user scrolls up; keep open menus visible.
+const header = document.querySelector('.header');
+const menuToggle = document.querySelector('.menu-toggle');
+const mobileMenu = window.matchMedia('(max-width: 700px)');
+function closeMenu(returnFocus = false) {
+  header.classList.remove('menu-open');
+  menuToggle.setAttribute('aria-expanded', 'false');
+  menuToggle.setAttribute('aria-label', 'Open menu');
+  if (returnFocus) menuToggle.focus();
+}
+menuToggle.addEventListener('click', () => {
+  const open = menuToggle.getAttribute('aria-expanded') !== 'true';
+  header.classList.toggle('menu-open', open);
+  menuToggle.setAttribute('aria-expanded', String(open));
+  menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  header.classList.remove('is-hidden');
+});
+header.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && header.classList.contains('menu-open')) closeMenu(true);
+});
+document.addEventListener('click', event => {
+  if (!header.contains(event.target)) closeMenu();
+});
+mobileMenu.addEventListener('change', () => closeMenu());
+header.addEventListener('focusin', () => header.classList.remove('is-hidden'));
+let previousScroll = Math.max(0, window.scrollY);
+window.addEventListener('scroll', () => {
+  const current = Math.max(0, window.scrollY);
+  if (current <= header.offsetHeight || header.classList.contains('menu-open')) {
+    header.classList.remove('is-hidden');
+    previousScroll = current;
+    return;
+  }
+  if (Math.abs(current - previousScroll) < 6) return;
+  header.classList.toggle('is-hidden', current > previousScroll);
+  previousScroll = current;
+}, {passive: true});
