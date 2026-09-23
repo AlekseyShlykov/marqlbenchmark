@@ -1,0 +1,158 @@
+{
+  "date": "2026-09-19",
+  "source": "https://bench-data.marql.one/reports/report-models.json",
+  "models": [
+    {
+      "name": "DeepSeek V4 Pro",
+      "policy": "shelfsense-llm@3+337ed587",
+      "worlds": {
+        "A/v2": {
+          "n": 5,
+          "econProfit": 19205337.092,
+          "prize": 0.7360596235717234,
+          "deltaVsReference": 146114.60599999985,
+          "wins": 4,
+          "losses": 1
+        },
+        "B/v2": {
+          "n": 5,
+          "econProfit": 16012236.081999999,
+          "prize": 0.16065269408502825,
+          "deltaVsReference": 183898.3179999996,
+          "wins": 4,
+          "losses": 1
+        },
+        "C/v2": {
+          "n": 5,
+          "econProfit": 19093892.516000003,
+          "prize": 0.9380516956578543,
+          "deltaVsReference": 400075.96400000044,
+          "wins": 5,
+          "losses": 0
+        },
+        "E/v2": {
+          "n": 5,
+          "econProfit": 14381476.006000001,
+          "prize": 0.8958535358028783,
+          "deltaVsReference": 356748.96400000004,
+          "wins": 5,
+          "losses": 0
+        }
+      }
+    },
+    {
+      "name": "GLM-5.3",
+      "policy": "shelfsense-llm@3+aed988d4",
+      "worlds": {
+        "A/v2": {
+          "n": 5,
+          "econProfit": 19308279.106,
+          "prize": 0.7944994499628908,
+          "deltaVsReference": 249056.62000000066,
+          "wins": 5,
+          "losses": 0
+        },
+        "B/v2": {
+          "n": 5,
+          "econProfit": 16076255.122000003,
+          "prize": 0.1770115537768031,
+          "deltaVsReference": 247917.35799999983,
+          "wins": 4,
+          "losses": 1
+        },
+        "C/v2": {
+          "n": 5,
+          "econProfit": 19154106.432,
+          "prize": 0.9415608070817905,
+          "deltaVsReference": 460289.8799999993,
+          "wins": 5,
+          "losses": 0
+        },
+        "E/v2": {
+          "n": 5,
+          "econProfit": 14369915.243999999,
+          "prize": 0.892009158093743,
+          "deltaVsReference": 345188.2020000007,
+          "wins": 5,
+          "losses": 0
+        }
+      }
+    },
+    {
+      "name": "GPT-OSS 120B",
+      "policy": "shelfsense-llm@3+ea9c70b5",
+      "worlds": {
+        "A/v2": {
+          "n": 5,
+          "econProfit": 19217198.053999998,
+          "prize": 0.7086239415187727,
+          "deltaVsReference": 157975.56799999886,
+          "wins": 4,
+          "losses": 1
+        },
+        "B/v2": {
+          "n": 5,
+          "econProfit": 15729541.746000001,
+          "prize": 0.08798243593773185,
+          "deltaVsReference": -98796.01799999997,
+          "wins": 1,
+          "losses": 4
+        },
+        "C/v2": {
+          "n": 5,
+          "econProfit": 19015687.572,
+          "prize": 0.9265873473005465,
+          "deltaVsReference": 321871.0199999992,
+          "wins": 4,
+          "losses": 1
+        },
+        "E/v2": {
+          "n": 5,
+          "econProfit": 14321032.878,
+          "prize": 0.8794550676766859,
+          "deltaVsReference": 296305.8360000007,
+          "wins": 5,
+          "losses": 0
+        }
+      }
+    },
+    {
+      "name": "GLM-5.2",
+      "policy": "shelfsense-llm@3+f540dbb0",
+      "worlds": {
+        "A/v2": {
+          "n": 5,
+          "econProfit": 19334047.574,
+          "prize": 0.8120502894907515,
+          "deltaVsReference": 274825.0879999992,
+          "wins": 5,
+          "losses": 0
+        },
+        "B/v2": {
+          "n": 5,
+          "econProfit": 15960228.37,
+          "prize": 0.14848225887438438,
+          "deltaVsReference": 131890.6059999995,
+          "wins": 4,
+          "losses": 1
+        },
+        "C/v2": {
+          "n": 5,
+          "econProfit": 19225389.84,
+          "prize": 0.947705235993632,
+          "deltaVsReference": 531573.2879999995,
+          "wins": 5,
+          "losses": 0
+        },
+        "E/v2": {
+          "n": 5,
+          "econProfit": 14398458.978,
+          "prize": 0.9009731743702826,
+          "deltaVsReference": 373731.93600000034,
+          "wins": 5,
+          "losses": 0
+        }
+      }
+    }
+  ]
+}

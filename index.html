@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI retail benchmark by marql</title>
+<meta name="description" content="Give AI a retail chain. Measure what its decisions are worth. Explore marql’s open retail benchmark, compare models, and run your own agent.">
+<meta name="theme-color" content="#f7f7f3">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;550;600;650;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"><script src="app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="header wrap"><a class="brand" href="#" aria-label="marql home">marql<span class="brand-dot"></span></a><span class="brand-label">RETAIL BENCHMARK <span>v0.2</span></span><nav aria-label="Main navigation"><a href="#results">Results</a><a href="#about">The benchmark</a><a href="#methodology">Methodology</a></nav><a class="button small dark" href="#submit">Run your model <span>↗</span></a></header>
+<main id="main">
+<section class="hero wrap">
+<div class="hero-image" aria-hidden="true"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/marql-simulation-poster.png"><img src="assets/marql-simulation.gif" width="1000" height="638" alt="" fetchpriority="high"></picture></div>
+<div class="hero-content"><h1>AI retail<br>benchmark<br><span>by marql</span></h1><p>Give AI the keys to a retail chain and see what its decisions are really worth.</p><div class="hero-actions"><a class="button dark" href="#results">Explore the results <span>↘</span></a><a class="text-link" href="https://retail-bench.marql.one/#/live" target="_blank" rel="noopener">Watch the simulation ↗</a></div></div>
+<div class="simulation-tag"><span class="status-dot"></span> MARQL SIMULATION <span class="muted">/ RETAIL WORLD</span></div>
+<div class="hero-bottom"><span>SCROLL TO EXPLORE ↓</span></div>
+</section>
+<div class="facts wrap"><div><span class="fact-label">THE STARTING QUESTION</span><strong>$100k<span> in stock. What comes next?</span></strong></div><div><strong>4</strong><span>retail worlds</span></div><div><strong>5–10</strong><span>stores per chain</span></div><div><strong>1,200–3,000</strong><span>products to manage</span></div></div>
+<section id="results" class="section wrap"><div class="section-top"><div><div class="eyebrow">01 / THE RESULTS</div><h2>Start with $100k in stocks. See how each model measures up.</h2></div></div>
+<div class="chart-panel"><div class="chart-toolbar"><div><span class="eyebrow">THE $100K COMPARISON</span><h3>A common scale. A clearer comparison.</h3></div><label class="select-label"><span>Retail world</span><select id="world"><option value="A/v2">Convenience</option><option value="B/v2">Fresh food</option><option value="C/v2">Seasonal specialty</option><option value="E/v2">Drugstore · hold-out</option></select></label></div>
+<div class="chart-meta"><span class="pill">ILLUSTRATIVE TRAJECTORIES</span><span class="mono muted">$100k × profit relative to the tuned formula</span><button id="replay" class="replay" type="button">↻ Replay</button></div>
+<div class="chart-container"><svg id="chart" viewBox="0 0 1080 320" role="img" aria-labelledby="chart-title chart-desc"><title id="chart-title">Model results on a $100,000 comparison scale</title><desc id="chart-desc">Illustrative paths to normalized published results. These are not daily observations or investment returns.</desc></svg><div id="chart-error" role="status" hidden>Results could not be loaded. <a href="https://retail-bench.marql.one/#/leaderboard">View the published leaderboard ↗</a></div></div>
+<div id="model-cards" class="model-cards" aria-live="polite"></div>
+<div class="chart-note"><span>ⓘ</span><p><b>How to read this:</b> $100k is an illustrative reference, not the starting capital of the published runs. Each endpoint = $100k × model profit ÷ matched formula profit. Paths between start and finish are illustrative, not observed daily data. All four models use the MARQL system with weekly reviews; each result averages 5 evaluation seeds.</p></div>
+</div><div class="source-row"><span>Published results · 19 Sep 2026 · Retail-Bench v0.2</span><a class="text-link" href="https://retail-bench.marql.one/#/leaderboard" target="_blank" rel="noopener">Explore the full leaderboard ↗</a></div>
+</section>
+<section id="about" class="section about-section"><div id="methodology" class="wrap"><div class="methodology-layout"><div class="methodology-copy"><div class="eyebrow">02 / THE METHODOLOGY</div><h2 class="methodology-title">How it work?</h2><h3 class="methodology-subtitle">How models work in real world simulations?</h3><div class="about-copy"><p>We put AI in charge of inventory in simulated retail chains — with changing demand, perishable stock, late deliveries, and real trade-offs. Realtime, the system sees what happened and decides what to order.</p></div><a class="button dark methodology-button" href="https://retail-bench.marql.one/#/methodology" target="_blank" rel="noopener">Read the full methodology <span>↗</span></a></div><picture class="methodology-media"><source media="(prefers-reduced-motion: reduce)" srcset="assets/methodology-simulation-poster.png"><img src="assets/methodology-simulation.gif" width="860" height="549" alt="Retail simulation showing deliveries between suppliers and stores" loading="lazy" decoding="async"></picture></div></div></section>
+<section id="submit" class="submit-section"><div class="wrap"><div class="methodology-layout submit-layout"><div class="submit-copy"><div class="eyebrow">03 / RUN YOUR MODEL</div><h2 class="submit-title">Add your model to the benchmark.</h2><p>Bring an HTTP endpoint that receives observations and returns order actions, or send us a model name. Follow the setup guide to join the benchmark.</p><a class="button lime" href="https://retail-bench.marql.one/#/submit" target="_blank" rel="noopener">How to connect your model <span>↗</span></a></div><div class="code-card"><div class="code-top"><span><i></i><i></i><i></i></span><span>agent-protocol.json</span><button type="button" id="copy-code" aria-label="Copy protocol example">Copy</button></div><pre><code id="protocol"><span class="comment">// 01 — receive the observation</span>
+<span class="code-green">POST</span> /act
+{
+  <span class="code-key">"protocolVersion"</span>: <span class="code-number">1</span>,
+  <span class="code-key">"episodeId"</span>: <span class="code-string">"A/v2/1000"</span>,
+  <span class="code-key">"observation"</span>: { <span class="comment">/* world state */</span> }
+}
+
+<span class="comment">// 02 — return your decision</span>
+{
+  <span class="code-key">"actions"</span>: [{
+    <span class="code-key">"kind"</span>: <span class="code-string">"order"</span>,
+    <span class="code-key">"store"</span>: <span class="code-string">"st-01"</span>,
+    <span class="code-key">"sku"</span>: <span class="code-string">"sku-0012"</span>,
+    <span class="code-key">"supplier"</span>: <span class="code-string">"sup-03"</span>,
+    <span class="code-key">"qty"</span>: <span class="code-number">24</span>
+  }]
+}</code></pre></div></div></div></section>
+</main>
+<footer class="wrap footer"><div><a class="brand" href="#">marql<span class="brand-dot"></span></a><p>Better decisions. Measured.</p></div><div class="footer-note">Retail-Bench v0.2<br>Simulated worlds. Reproducible results.</div><a class="text-link" href="https://marql.one/" target="_blank" rel="noopener">Built by marql</a></footer>
+</body></html>
