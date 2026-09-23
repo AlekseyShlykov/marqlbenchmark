@@ -19,11 +19,11 @@ function draw(animate = true) {
   });
   svg.querySelectorAll('g').forEach(el => el.remove());
   const mobile = window.innerWidth < 700;
-  const width = mobile ? 560 : 1080;
+  const width = mobile ? Math.max(260, Math.round(svg.getBoundingClientRect().width)) : 1080;
   svg.setAttribute('viewBox', `0 0 ${width} 320`);
   const min = Math.floor(Math.min(99000, ...data.map(m => m.value)) / 1000) * 1000;
   const max = Math.ceil(Math.max(101000, ...data.map(m => m.value)) / 1000) * 1000;
-  const left = 65, right = width - 80, top = 30, bottom = 260;
+  const left = mobile ? 52 : 65, right = width - (mobile ? 18 : 80), top = 30, bottom = 260;
   const y = value => bottom - (value - min) / (max - min) * (bottom - top);
   const grid = node('g', {});
   for (let i = 0; i <= 4; i++) {
@@ -32,7 +32,7 @@ function draw(animate = true) {
     grid.append(node('text', {x:left-12,y:y(value)+4,'text-anchor':'end',class:'chart-axis'}, '$'+(value/1000).toFixed(value%1000?1:0)+'k'));
   }
   grid.append(node('line', {x1:left,y1:y(100000),x2:right,y2:y(100000),stroke:'#b6c3a9','stroke-dasharray':'4 5'}));
-  ['START','ILLUSTRATIVE SIMULATION PROGRESS','END'].forEach((text,i)=>grid.append(node('text', {x:i===0?left:i===1?(left+right)/2:right,y:292,'text-anchor':i===0?'start':i===1?'middle':'end',class:'chart-axis',style:mobile&&i===1?'font-size:8px':''},text)));
+  ['START',mobile ? 'ILLUSTRATIVE' : 'ILLUSTRATIVE SIMULATION PROGRESS','END'].forEach((text,i)=>grid.append(node('text', {x:i===0?left:i===1?(left+right)/2:right,y:292,'text-anchor':i===0?'start':i===1?'middle':'end',class:'chart-axis',style:mobile&&i===1?'font-size:10px':''},text)));
   svg.append(grid);
   // Curves deliberately interpolate only. No generated point is presented as an observation.
   data.forEach((m,i)=>{
@@ -41,7 +41,7 @@ function draw(animate = true) {
     const path=`M ${left} ${y(100000)} C ${left+(right-left)*.28} ${y(100000+delta*.05)}, ${left+(right-left)*.67} ${y(100000+delta*.93)}, ${right} ${y(m.value)}`;
     group.append(node('path',{d:path,stroke:m.color,class:'chart-line'+(animate?' animate':''),pathLength:1,'stroke-dasharray':1,style:`animation-delay:${i*.08}s`}));
     group.append(node('circle',{cx:right,cy:y(m.value),r:3.5,fill:m.color,stroke:'white','stroke-width':2}));
-    if(selected===i)group.append(node('text',{x:right+9,y:y(m.value)+4,fill:m.color,class:'chart-end'},money(m.value)));
+    if(selected===i&&!mobile)group.append(node('text',{x:right+9,y:y(m.value)+4,fill:m.color,class:'chart-end'},money(m.value)));
     svg.append(group);
   });
   const cards=document.querySelector('#model-cards');
