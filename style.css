@@ -16,3 +16,7 @@
 
 .methodology-layout{margin-top:0}.methodology-copy .methodology-title,.submit-layout .submit-title{margin-top:20px}
 
+
+.footer{padding-top:20px;padding-bottom:20px}.footer p{margin-top:5px}@media(max-width:700px){.footer{padding-top:16px;padding-bottom:16px;gap:14px}}
+
+.brand{align-items:center;flex-shrink:0}.brand img{display:block;width:132px;height:auto}.footer .brand img{width:115px}@media(max-width:700px){.header .brand img{width:100px}}
