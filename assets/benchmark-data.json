@@ -153,6 +153,45 @@
           "losses": 0
         }
       }
+    },
+    {
+      "name": "Oracle",
+      "policy": "oracle@1",
+      "kind": "reference",
+      "worlds": {
+        "A/v2": {
+          "n": 20,
+          "econProfit": 18918303.781999998,
+          "prize": null,
+          "deltaVsReference": 472186.95149999997,
+          "wins": 20,
+          "losses": 0
+        },
+        "B/v2": {
+          "n": 20,
+          "econProfit": 18601154.986500002,
+          "prize": null,
+          "deltaVsReference": 3256363.3839999996,
+          "wins": 20,
+          "losses": 0
+        },
+        "C/v2": {
+          "n": 20,
+          "econProfit": 22857510.2975,
+          "prize": null,
+          "deltaVsReference": 1222007.525,
+          "wins": 20,
+          "losses": 0
+        },
+        "E/v2": {
+          "n": 20,
+          "econProfit": 15663142.589000002,
+          "prize": null,
+          "deltaVsReference": 747163.0920000003,
+          "wins": 20,
+          "losses": 0
+        }
+      }
     }
   ]
 }

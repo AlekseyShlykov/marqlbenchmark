@@ -1,5 +1,5 @@
 'use strict';
-const colors = ['#337752', '#798bca', '#c29652', '#819270'];
+const colors = ['#337752', '#798bca', '#c29652', '#819270', '#8055ac'];
 const svg = document.querySelector('#chart');
 const ns = 'http://www.w3.org/2000/svg';
 const money = n => '$' + Math.round(n).toLocaleString('en-US');
@@ -48,10 +48,10 @@ function draw(animate = true) {
   cards.replaceChildren();
   data.forEach((m,i)=>{
     const button=document.createElement('button');
-    button.type='button';button.className='model-card';button.style.setProperty('--model',m.color);
+    button.type='button';button.className='model-card'+(m.kind==='reference'?' oracle-card':'');button.style.setProperty('--model',m.color);
     button.setAttribute('aria-pressed',String(selected<0||selected===i));
     button.setAttribute('aria-label',`${m.name}, ${money(m.value)} illustrative value. Highlight model.`);
-    const parts=[['model-name',m.name],['model-value',money(m.value)],['model-detail','Illustrative endpoint'],['model-detail','Profit: '+money(m.result.econProfit)],['model-score',(m.result.deltaVsReference>=0?'+':'−')+money(Math.abs(m.result.deltaVsReference))+' vs. formula']];
+    const parts=[['model-name',m.name],['model-value',money(m.value)],['model-detail',m.kind==='reference'?'Future-aware reference':'Illustrative endpoint'],['model-detail','Profit: '+money(m.result.econProfit)],['model-detail',m.result.n+' evaluation seeds'],['model-score',(m.result.deltaVsReference>=0?'+':'−')+money(Math.abs(m.result.deltaVsReference))+' vs. formula']];
     parts.forEach(([className,text])=>{const span=document.createElement('span');span.className=className;span.textContent=text;if(className==='model-name'){const dot=document.createElement('i');dot.className='model-dot';span.prepend(dot);}button.append(span);});
     button.addEventListener('click',()=>{selected=selected===i?-1:i;draw(false);document.querySelectorAll('.model-card')[i].focus({preventScroll:true});});
     cards.append(button);

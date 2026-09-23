@@ -64,3 +64,8 @@
  .header.menu-open nav{display:flex;flex-direction:column;align-items:stretch;gap:0}.header nav a,.header nav a:not(:first-child){font-size:14px;padding:0 10px;min-height:44px}
  .footer{flex-wrap:nowrap;gap:16px}.footer>.text-link{width:auto;white-space:nowrap}.footer-note{font-size:9px}
 }
+
+/* Four AI models and the Oracle reference. */
+.model-cards{grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line)}.model-cards .model-card{border:0}.model-cards .oracle-card{background:#f7f3fb}.model-cards .oracle-card[aria-pressed=true]{background:#eee7f7}
+@media(min-width:361px) and (max-width:1000px){.model-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.model-cards .oracle-card{grid-column:1/-1}}
+@media(max-width:360px){.model-cards{grid-template-columns:1fr}}
