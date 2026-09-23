@@ -5,6 +5,49 @@ const ns = 'http://www.w3.org/2000/svg';
 const money = n => '$' + Math.round(n).toLocaleString('en-US');
 let models = [];
 let selected = -1;
+let hovered = -1;
+let focused = -1;
+function updateHighlight() {
+  const active = hovered >= 0 ? hovered : focused >= 0 ? focused : selected;
+  svg.querySelectorAll('.model-series').forEach((group, i) => {
+    group.setAttribute('opacity', active < 0 || active === i ? '1' : '.18');
+    group.classList.toggle('is-highlighted', active === i);
+    const label = group.querySelector('.chart-end');
+    if (label) label.style.display = active === i ? '' : 'none';
+  });
+  document.querySelectorAll('.model-card').forEach((card, i) => {
+    card.classList.toggle('is-highlighted', active === i);
+    card.classList.toggle('is-dimmed', active >= 0 && active !== i);
+    card.setAttribute('aria-pressed', String(selected < 0 || selected === i));
+  });
+}
+function setHover(index) {
+  if (hovered === index) return;
+  hovered = index;
+  updateHighlight();
+}
+// Pick the closest curve instead of letting overlapping SVG hit areas obscure it.
+svg.addEventListener('pointermove', event => {
+  if (event.pointerType === 'touch') return;
+  const matrix = svg.getScreenCTM();
+  if (!matrix) return;
+  const point = new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse());
+  let nearest = -1;
+  let distance = 12 / Math.hypot(matrix.a, matrix.b);
+  svg.querySelectorAll('.chart-line').forEach((path, index) => {
+    let lo = 0, hi = path.getTotalLength();
+    for (let step = 0; step < 14; step++) {
+      const mid = (lo + hi) / 2;
+      if (path.getPointAtLength(mid).x < point.x) lo = mid;
+      else hi = mid;
+    }
+    const curve = path.getPointAtLength((lo + hi) / 2);
+    const delta = Math.hypot(curve.x - point.x, curve.y - point.y);
+    if (delta < distance) { distance = delta; nearest = index; }
+  });
+  setHover(nearest);
+});
+svg.addEventListener('pointerleave', () => setHover(-1));
 function node(tag, attrs, text) {
   const el = document.createElementNS(ns, tag);
   Object.entries(attrs).forEach(([key, value]) => el.setAttribute(key, value));
@@ -12,10 +55,11 @@ function node(tag, attrs, text) {
   return el;
 }
 function draw(animate = true) {
+  hovered = -1; focused = -1;
   const world = document.querySelector('#world').value;
   const data = models.map((m, i) => {
     const result = m.worlds[world];
-    return {...m, result, color: colors[i], value: 100000 * result.econProfit / (result.econProfit - result.deltaVsReference)};
+    return {...m, result, color: m.color || colors[i], value: 100000 * result.econProfit / (result.econProfit - result.deltaVsReference)};
   });
   svg.querySelectorAll('g').forEach(el => el.remove());
   const mobile = window.innerWidth < 700;
@@ -36,12 +80,12 @@ function draw(animate = true) {
   svg.append(grid);
   // Curves deliberately interpolate only. No generated point is presented as an observation.
   data.forEach((m,i)=>{
-    const group=node('g',{'aria-label':`${m.name}: ${money(m.value)}, illustrative endpoint`,opacity:selected<0||selected===i?1:.13});
+    const group=node('g',{class:'model-series','aria-label':`${m.name}: ${money(m.value)}, illustrative endpoint`,opacity:selected<0||selected===i?1:.13});
     const delta=m.value-100000;
     const path=`M ${left} ${y(100000)} C ${left+(right-left)*.28} ${y(100000+delta*.05)}, ${left+(right-left)*.67} ${y(100000+delta*.93)}, ${right} ${y(m.value)}`;
     group.append(node('path',{d:path,stroke:m.color,class:'chart-line'+(animate?' animate':''),pathLength:1,'stroke-dasharray':1,style:`animation-delay:${i*.08}s`}));
     group.append(node('circle',{cx:right,cy:y(m.value),r:3.5,fill:m.color,stroke:'white','stroke-width':2}));
-    if(selected===i&&!mobile)group.append(node('text',{x:right+9,y:y(m.value)+4,fill:m.color,class:'chart-end'},money(m.value)));
+    if(!mobile)group.append(node('text',{x:right+9,y:y(m.value)+4,fill:m.color,class:'chart-end'},money(m.value)));
     svg.append(group);
   });
   const cards=document.querySelector('#model-cards');
@@ -53,11 +97,16 @@ function draw(animate = true) {
     button.setAttribute('aria-label',`${m.name}, ${money(m.value)} illustrative value. Highlight model.`);
     const parts=[['model-name',m.name],['model-value',money(m.value)],['model-detail',m.kind==='reference'?'Future-aware reference':'Illustrative endpoint'],['model-detail','Profit: '+money(m.result.econProfit)],['model-detail',m.result.n+' evaluation seeds'],['model-score',(m.result.deltaVsReference>=0?'+':'−')+money(Math.abs(m.result.deltaVsReference))+' vs. formula']];
     parts.forEach(([className,text])=>{const span=document.createElement('span');span.className=className;span.textContent=text;if(className==='model-name'){const dot=document.createElement('i');dot.className='model-dot';span.prepend(dot);}button.append(span);});
-    button.addEventListener('click',()=>{selected=selected===i?-1:i;draw(false);document.querySelectorAll('.model-card')[i].focus({preventScroll:true});});
+    button.addEventListener('pointerenter',event=>{if(event.pointerType!=='touch')setHover(i);});
+    button.addEventListener('pointerleave',()=>setHover(-1));
+    button.addEventListener('focus',()=>{if(button.matches(':focus-visible')){focused=i;updateHighlight();}});
+    button.addEventListener('blur',()=>{focused=-1;updateHighlight();});
+    button.addEventListener('click',()=>{selected=selected===i?-1:i;updateHighlight();});
     cards.append(button);
   });
+  updateHighlight();
 }
-fetch('assets/benchmark-data.json?v=oracle-1', {cache: 'no-cache'}).then(response=>{if(!response.ok)throw new Error('Data unavailable');return response.json();}).then(data=>{
+fetch('assets/benchmark-data.json?v=oracle-first-1', {cache: 'no-cache'}).then(response=>{if(!response.ok)throw new Error('Data unavailable');return response.json();}).then(data=>{
   models=data.models;draw(false);
   const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){draw(true);observer.disconnect();}},{threshold:.2});observer.observe(svg);
 }).catch(()=>{document.querySelector('#chart-error').hidden=false;svg.hidden=true;document.querySelector('#world').disabled=true;document.querySelector('#replay').disabled=true;});
